@@ -1,0 +1,12 @@
+.navigation {
+  height: 50px;
+  padding: 0rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .nav-links-container a {
+    color: black;
+    text-decoration: none;
+  }
+}

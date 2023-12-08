@@ -1,0 +1,14 @@
+html {
+  background-color: rgb(172, 172, 172);
+  margin: 0;
+}
+
+.app {
+  height: 100vh;
+  margin: 0rem 5rem;
+}
+
+h3,
+p {
+  margin: 0;
+}
