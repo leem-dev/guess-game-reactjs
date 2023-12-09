@@ -8,7 +8,7 @@ const GuessGame = () => {
 
   const getUserInput = (e) => {
     if (e.target.value.length <= 2) {
-    setUserText(e.target.value);
+      setUserText(e.target.value);
     }
   };
 
@@ -17,35 +17,35 @@ const GuessGame = () => {
   };
 
   const getCompGuess = () => {
-    setCompText(Math.trunc(Math.random() * 30) + 1);
+    setCompText(Math.trunc(Math.random() * 10) + 1);
   };
 
   const inPutText = document.getElementById("target-value");
 
-  const renderFunc = (e) => {
-    e.preventDefault();
-    clickedCount();
-    getCompGuess();
-  };
-
   const checkBeforeSubmit = (e) => {
     e.preventDefault();
-    if (userText.length >= 1 && userText.length <= 2) {
+    if (userText.length > 0 && Number(userText) <= 10 && countClick > 0) {
       if (Number(userText) === Number(compText)) {
         alert("Congratulations you won the guess game");
-      } else if (Number(userText) !== Number(compText) && countClick > 0) {
-        renderFunc(e);
+        clickToReset(e);
+      } else if (Number(userText) !== Number(compText)) {
+        getCompGuess();
+        clickedCount();
       }
+    } else if (
+      userText.length > 0 &&
+      Number(userText) <= 10 &&
+      countClick < 1
+    ) {
+      clickToReset(e);
     }
   };
 
   const clickToClear = (e) => {
     e.preventDefault();
-    if (userText.length >= 1) {
-      setUserText("");
-      setCompText("");
-      inPutText.value = "";
-    }
+    setUserText("");
+    setCompText("");
+    inPutText.value = "";
   };
 
   const clickToReset = (e) => {
