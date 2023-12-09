@@ -7,7 +7,9 @@ const GuessGame = () => {
   const [countClick, setCountClick] = useState(3);
 
   const getUserInput = (e) => {
+    if (e.target.value.length <= 2) {
     setUserText(e.target.value);
+    }
   };
 
   const clickedCount = () => {
