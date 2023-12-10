@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { React, useState } from "react";
 import "./game.styles.css";
+import PopUp from "./popup.component";
 
 const GuessGame = () => {
   const [userText, setUserText] = useState("");
   const [compText, setCompText] = useState("");
   const [countClick, setCountClick] = useState(3);
+  const [winner, setWinner] = useState(false);
+
+  const hideWinner = () => setWinner(false);
+
+  const inPutText = (e) => e.target.value;
 
   const getUserInput = (e) => {
-    if (e.target.value.length <= 2) {
-      setUserText(e.target.value);
+    if (inPutText(e).length <= 2) {
+      setUserText(inPutText(e));
     }
   };
 
@@ -17,20 +23,19 @@ const GuessGame = () => {
   };
 
   const getCompGuess = () => {
-    setCompText(Math.trunc(Math.random() * 10) + 1);
+    setCompText(3);
+    // setCompText(Math.trunc(Math.random() * 10) + 1);
   };
-
-  const inPutText = document.getElementById("target-value");
 
   const checkBeforeSubmit = (e) => {
     e.preventDefault();
     if (userText.length > 0 && Number(userText) <= 10 && countClick > 0) {
       if (Number(userText) === Number(compText)) {
-        alert("Congratulations you won the guess game");
-        clickToReset(e);
+        return <PopUp />;
+        // clickToReset(e);
       } else if (Number(userText) !== Number(compText)) {
-        getCompGuess();
         clickedCount();
+        getCompGuess();
       }
     } else if (
       userText.length > 0 &&
@@ -41,17 +46,11 @@ const GuessGame = () => {
     }
   };
 
-  const clickToClear = (e) => {
-    e.preventDefault();
-    setUserText("");
-    setCompText("");
-    inPutText.value = "";
-  };
-
   const clickToReset = (e) => {
     e.preventDefault();
-    clickToClear(e);
     setCountClick(3);
+    setUserText("");
+    setCompText("");
   };
 
   return (
@@ -80,9 +79,6 @@ const GuessGame = () => {
       <div className="button-container">
         <div className="button">
           <input type="submit" onClick={checkBeforeSubmit} />
-        </div>
-        <div className="button">
-          <input type="submit" value="clear" onClick={clickToClear} />
         </div>
         <div className="button">
           <input type="reset" onClick={clickToReset} />
