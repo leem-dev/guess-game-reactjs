@@ -23,8 +23,7 @@ const GuessGame = () => {
   };
 
   const getCompGuess = () => {
-    setCompText(3);
-    // setCompText(Math.trunc(Math.random() * 10) + 1);
+    setCompText(Math.trunc(Math.random() * 10) + 1);
   };
 
   const checkBeforeSubmit = (e) => {
