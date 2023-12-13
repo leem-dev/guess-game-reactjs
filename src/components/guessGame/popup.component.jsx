@@ -1,14 +1,7 @@
 import { useState } from "react";
 import Modal from "react-overlays/Modal";
 
-const PopUp = () => {
-  const [showModal, setShowModal] = useState(false);
 
-  const handleClose = () => setShowModal(false);
-
-  const handleSuccess = () => {
-    console.log("Success");
-  };
 
   const renderBackdrop = (props) => <div className="backdrop" {...props} />;
   return (
