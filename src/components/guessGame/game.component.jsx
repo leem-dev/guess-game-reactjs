@@ -1,55 +1,95 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import "./game.styles.css";
-import PopUp from "./popup.component";
+import { click } from "@testing-library/user-event/dist/click";
+// import PopUp from "./popup.component";
 
 const GuessGame = () => {
   const [userText, setUserText] = useState("");
-  const [compText, setCompText] = useState("");
-  const [countClick, setCountClick] = useState(3);
-  const [winner, setWinner] = useState(false);
+  const [count, setCount] = useState(3);
+  const [randomNumber, setRandomNumber] = useState(0);
 
-  const hideWinner = () => setWinner(false);
+  const targetVal = document.getElementById("target-value");
+  const buttonFold = document.getElementById("button-folder");
+  const gameButton = document.querySelectorAll("game-button");
+  const countParag = document.getElementById("count-parag");
+  const showComp = document.getElementById("show-random");
+  const showUser = document.getElementById("show-usertext");
 
-  const inPutText = (e) => e.target.value;
+  // const handleNewGame = () => {};
+
+  const createButton = () => {
+    const replacedChildren = ;
+    console.log(replacedChildren);
+
+    const newButton = document.createElement("button");
+    newButton.textContent = "New Game";
+
+    buttonFold.replaceChildren(newButton);
+
+    newButton.addEventListener("click", () => {
+      targetVal.value = "";
+      setUserText("");
+      showComp.textContent = "";
+      countParag.textContent = "Click the submit button to start game";
+
+      buttonFold.replaceChildren(replacedChildren);
+    });
+  };
 
   const getUserInput = (e) => {
-    if (inPutText(e).length <= 2) {
-      setUserText(inPutText(e));
+    if (
+      e.target.value.length <= 2 &&
+      e.target.value > 0 &&
+      e.target.value < 11
+    ) {
+      setUserText(e.target.value);
     }
   };
 
-  const clickedCount = () => {
-    setCountClick(countClick - 1);
+  const countClicked = () => {
+    setCount(count - 1);
   };
 
-  const getCompGuess = () => {
-    setCompText(Math.trunc(Math.random() * 10) + 1);
-  };
+  // useEffect(() => {
+
+  // }, []);
+
+  useEffect(() => {
+    const number = Math.trunc(Math.random() * 10) + 1;
+    setRandomNumber(number);
+
+    if (count === 0) {
+      showUser.textContent = `${userText}`;
+      showComp.textContent = `${randomNumber}`;
+      countParag.textContent = `You lost the game, the answer is ${randomNumber}`;
+      createButton();
+    }
+  });
 
   const checkBeforeSubmit = (e) => {
     e.preventDefault();
-    if (userText.length > 0 && Number(userText) <= 10 && countClick > 0) {
-      if (Number(userText) === Number(compText)) {
-        return <PopUp />;
-        // clickToReset(e);
-      } else if (Number(userText) !== Number(compText)) {
-        clickedCount();
-        getCompGuess();
+    if (userText.length > 0) {
+      if (Number(userText) === randomNumber) {
+        countClicked();
+        getUserInput(e);
+        showComp.textContent = `${randomNumber}`;
+        countParag.textContent = `Congratulations, You won the guess game`;
+        createButton();
+      } else if (Number(userText) !== randomNumber) {
+        getUserInput(e);
+        countClicked();
+        countParag.textContent = `You guessed wrong! You have ${
+          count - 1
+        } trials left for this game`;
       }
-    } else if (
-      userText.length > 0 &&
-      Number(userText) <= 10 &&
-      countClick < 1
-    ) {
       clickToReset(e);
     }
   };
 
   const clickToReset = (e) => {
     e.preventDefault();
-    setCountClick(3);
-    setUserText("");
-    setCompText("");
+    targetVal.value = "";
+    setRandomNumber("");
   };
 
   return (
@@ -64,22 +104,26 @@ const GuessGame = () => {
             className="user-input"
             onChange={getUserInput}
           />
-          <div className="render-user-choice">{userText}</div>
+          <div id="show-usertext" className="render-user-choice">
+            {userText}
+          </div>
         </div>
         <div className="dev-choice">
           <h3 className="dev-text">comp choice</h3>
           <span className="dev">💻</span>
           <div className="render-dev-choice">
-            <p>{compText}</p>
+            <p id="show-random"></p>
           </div>
         </div>
       </div>
-      <p className="render">You have {countClick} trials for this game</p>
-      <div className="button-container">
-        <div className="button">
+      <p id="count-parag" className="render">
+        Click the submit button to start game
+      </p>
+      <div id="button-folder" className="button-container">
+        <div className="button game-button">
           <input type="submit" onClick={checkBeforeSubmit} />
         </div>
-        <div className="button">
+        <div className="button game-button">
           <input type="reset" onClick={clickToReset} />
         </div>
       </div>
