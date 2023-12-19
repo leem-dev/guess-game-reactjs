@@ -8,7 +8,7 @@ const Guess = () => {
     <div className="guess-container">
       <Outlet />
       <GuessGame />
-      <PopUp />
+    
     </div>
   );
 };
