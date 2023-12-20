@@ -27,7 +27,8 @@
     align-items: center;
     gap: 50px;
 
-    .button input {
+    .button input,
+    .newButton {
       background-color: rgb(83, 83, 83);
       border: none;
       border-radius: 5px;
@@ -40,7 +41,8 @@
       transition: all linear 0.15s;
     }
 
-    .button input:hover {
+    .button input:hover,
+    .newButton:hover {
       background-color: rgb(62, 62, 62);
       cursor: pointer;
     }
@@ -170,4 +172,3 @@ button {
   align-items: center;
   flex-direction: column;
 }
-
