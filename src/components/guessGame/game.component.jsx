@@ -59,7 +59,7 @@ const GuessGame = () => {
   };
 
   useEffect(() => {
-    const number = 3;
+    const number = Math.trunc(Math.random() * 10) + 1;
     setRandomNumber(number);
 
     if (count === 0 && Number(userText) !== randomNumber) {
