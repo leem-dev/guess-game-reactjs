@@ -1,39 +1,24 @@
 import { React, useEffect, useState } from "react";
 import "./game.styles.css";
-import { click } from "@testing-library/user-event/dist/click";
-// import PopUp from "./popup.component";
 
 const GuessGame = () => {
   const [userText, setUserText] = useState("");
   const [count, setCount] = useState(3);
   const [randomNumber, setRandomNumber] = useState(0);
+  const [changeButton, setChangeButton] = useState(false);
 
   const targetVal = document.getElementById("target-value");
-  const buttonFold = document.getElementById("button-folder");
-  const gameButton = document.querySelectorAll("game-button");
   const countParag = document.getElementById("count-parag");
   const showComp = document.getElementById("show-random");
   const showUser = document.getElementById("show-usertext");
 
-  // const handleNewGame = () => {};
-
-  const createButton = () => {
-    const replacedChildren = ;
-    console.log(replacedChildren);
-
-    const newButton = document.createElement("button");
-    newButton.textContent = "New Game";
-
-    buttonFold.replaceChildren(newButton);
-
-    newButton.addEventListener("click", () => {
-      targetVal.value = "";
-      setUserText("");
-      showComp.textContent = "";
-      countParag.textContent = "Click the submit button to start game";
-
-      buttonFold.replaceChildren(replacedChildren);
-    });
+  const handleNewGame = () => {
+    targetVal.value = "";
+    setUserText("");
+    showComp.textContent = "";
+    setCount(3);
+    countParag.textContent = "Click the submit button to start game";
+    setChangeButton(false);
   };
 
   const getUserInput = (e) => {
@@ -50,46 +35,64 @@ const GuessGame = () => {
     setCount(count - 1);
   };
 
-  // useEffect(() => {
+  const greaterThan = () => {
+    if (count > 1) {
+      countParag.textContent = `You guessed wrong! You have ${
+        count - 1
+      } trials left for this game`;
+    }
+  };
 
-  // }, []);
+  const lessthan = () => {
+    showUser.textContent = `${userText}`;
+    showComp.textContent = `${randomNumber}`;
+    countParag.textContent = `You lost the game, the answer is ${randomNumber}`;
+    setChangeButton(true);
+  };
+
+  const isTheSame = () => {
+    greaterThan();
+    countClicked();
+    showComp.textContent = `${randomNumber}`;
+    countParag.textContent = `Congratulations, You won the guess game`;
+    setChangeButton(true);
+  };
 
   useEffect(() => {
-    const number = Math.trunc(Math.random() * 10) + 1;
+    const number = 3;
     setRandomNumber(number);
 
-    if (count === 0) {
-      showUser.textContent = `${userText}`;
-      showComp.textContent = `${randomNumber}`;
-      countParag.textContent = `You lost the game, the answer is ${randomNumber}`;
-      createButton();
+    if (count === 0 && Number(userText) !== randomNumber) {
+      lessthan();
+    } else if (count === 0 && Number(userText) === randomNumber) {
+      isTheSame();
     }
   });
 
   const checkBeforeSubmit = (e) => {
     e.preventDefault();
-    if (userText.length > 0) {
+    if (
+      userText.length > 0 &&
+      userText.length < 2 &&
+      targetVal.value.length > 0 &&
+      targetVal.value.length < 2
+    ) {
       if (Number(userText) === randomNumber) {
-        countClicked();
         getUserInput(e);
-        showComp.textContent = `${randomNumber}`;
-        countParag.textContent = `Congratulations, You won the guess game`;
-        createButton();
+        isTheSame();
       } else if (Number(userText) !== randomNumber) {
-        getUserInput(e);
         countClicked();
-        countParag.textContent = `You guessed wrong! You have ${
-          count - 1
-        } trials left for this game`;
+        getUserInput(e);
+        greaterThan();
       }
-      clickToReset(e);
     }
   };
 
   const clickToReset = (e) => {
     e.preventDefault();
     targetVal.value = "";
-    setRandomNumber("");
+    showUser.textContent = "";
+    showComp.textContent = "";
   };
 
   return (
@@ -119,14 +122,22 @@ const GuessGame = () => {
       <p id="count-parag" className="render">
         Click the submit button to start game
       </p>
-      <div id="button-folder" className="button-container">
-        <div className="button game-button">
-          <input type="submit" onClick={checkBeforeSubmit} />
+      {changeButton ? (
+        <div className="button-container">
+          <button className="button newButton" onClick={handleNewGame}>
+            New Game
+          </button>
         </div>
-        <div className="button game-button">
-          <input type="reset" onClick={clickToReset} />
+      ) : (
+        <div id="button-folder" className="button-container">
+          <div className="button game-button">
+            <input type="submit" onClick={checkBeforeSubmit} />
+          </div>
+          <div className="button game-button">
+            <input type="reset" onClick={clickToReset} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
