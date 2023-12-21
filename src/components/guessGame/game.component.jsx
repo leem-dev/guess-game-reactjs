@@ -37,9 +37,9 @@ const GuessGame = () => {
 
   const greaterThan = () => {
     if (count > 1) {
-      countParag.textContent = `You guessed wrong! You have ${
-        count - 1
-      } trials left for this game`;
+      const reducedCount = count - 1;
+      const getTrial = reducedCount > 1 ? "trials" : "trial";
+      countParag.textContent = `You guessed wrong! You have ${reducedCount} ${getTrial} left for this game`;
     }
   };
 
